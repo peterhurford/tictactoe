@@ -150,6 +150,17 @@ module TicTacToe
 		end
 
 
+		def helper_display_name name											# Helper method to turn the player variable into a displayable name based on game type
+			if $game_type == "AI"
+				disp = "Human" if name == "O"
+				disp = "The AI" if name == "X"
+			else
+				disp = "Player " + name.to_s
+			end
+			disp
+		end
+
+
 		def switch_player! 																# Method to switch the player.
 			$curr_player == "O" ? $curr_player = "X" : $curr_player = "O"
 		end
@@ -159,7 +170,8 @@ module TicTacToe
 			$game.make_move!($curr_player, plSquare)				# Make the move on the board.
 			if $game.win?																		# Check board state for winner...
 				$game.print_board()
-				puts "Congratulations... #{$game.win?} wins!"
+				#{helper_display_cp_name()}
+				puts "Congratulations... " + helper_display_name($game.win?) + " wins!"
 			elsif $game.draw? 															# Check board state for a draw...
 				$game.print_board()
 				puts "The game ends in a draw!"
@@ -216,7 +228,8 @@ module TicTacToe
 
 		def start_turn 																		# Method to implement the turn for the user (called by runner.rb)
 			$game.print_board()
-			puts "Player #{$curr_player}... On which square number would you like to play?"
+			puts helper_display_name($curr_player) + "... On which square number would you like to play?"
+
 			plSquare = STDIN.gets.chomp	 										# Get the move from the player via terminal.
 			
 			valid = "123456789".split("")										# Validate the input, reject it if not 1-9, and start over asking for input again.
@@ -240,7 +253,6 @@ module TicTacToe
 		def make_move!
 			move_made = false
 			while move_made == false
-				puts "Thinking..."
 				move = Random.new.rand(1..9)
 				if $game.legal_move?(move)
 					$player.process!(move)
@@ -253,6 +265,5 @@ module TicTacToe
 end
 
 ##### TO-DO
-## * AI moves randomly + commit
 ## * AI can go first or second at random + commit
 ## * AI is smart + commit
