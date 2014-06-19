@@ -8,6 +8,11 @@ module TicTacToe
 		end
 
 
+		def test_set_board board
+			@board = board
+		end
+
+
 		def helper_square_to_coords square
 			square = square.to_i
 			x = (square-1) / 3
@@ -111,7 +116,6 @@ module TicTacToe
 				for i in (0..2) do
 					three_dots_in_line = true if count["row"][i]["."] == 3 or count["col"][i]["."] == 3 or count["diag1"][0]["."] == 3 or count["diag2"][0]["."] == 3
 				end
-				puts three_dots_in_line.to_s + " " + total_dots.to_s + " "
 				return true if three_dots_in_line == true and total_dots == 3				
 			
 			else
@@ -151,7 +155,7 @@ module TicTacToe
 		def start_turn
 			@game.print_board()
 			puts "Player #{$curr_player}... On which square number would you like to play?"
-			plSquare = gets.chomp
+			plSquare = STDIN.gets.chomp
 			valid = "123456789".split("")
 			
 			unless valid.include? plSquare
@@ -178,14 +182,7 @@ module TicTacToe
 	end
 end
 
-
-game = TicTacToe::Game.new
-
-
-
 ##### TO-DO
-## * Clean code
-## * Commit
 ## * Write tests + commit
 ## * Refactor code + commit
 ## * Code comments + commit
