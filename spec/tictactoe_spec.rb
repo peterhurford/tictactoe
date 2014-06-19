@@ -107,6 +107,16 @@ describe TicTacToe do
 
 
 	describe "Board should draw" do
+		describe "no dot tie" do
+			sample_board =
+					[["O", "O", "X"],
+					["X", "X", "O"],
+					["O", "O", "X"]]
+			$game.test_set_board(sample_board)
+			output = $game.draw?
+			subject { output }
+			specify { output should == true }
+		end
 		describe "one dot tie A" do
 			sample_board =
 					[["X", "O", "X"],
@@ -122,6 +132,17 @@ describe TicTacToe do
 			sample_board =
 					[["O", "O", "X"],
 					[".", "X", "O"],
+					["X", "O", "X"]]
+			$game.test_set_board(sample_board)
+			output = $game.draw?
+			subject { output }
+			specify { output should == true }
+		end
+
+		describe "one dot tie C" do
+			sample_board =
+					[["O", "X", "O"],
+					["X", "O", "."],
 					["X", "O", "X"]]
 			$game.test_set_board(sample_board)
 			output = $game.draw?
@@ -151,6 +172,28 @@ describe TicTacToe do
 			specify { output should == true }
 		end
 
+		describe "two dot tie C" do
+			sample_board =
+					[["O", "X", "O"],
+					[".", "O", "."],
+					["X", "O", "X"]]
+			$game.test_set_board(sample_board)
+			output = $game.draw?
+			subject { output }
+			specify { output should == true }
+		end
+
+		describe "two dot tie D" do
+			sample_board =
+					[["O", "O", "X"],
+					["X", "X", "O"],
+					["O", ".", "."]]
+			$game.test_set_board(sample_board)
+			output = $game.draw?
+			subject { output }
+			specify { output should == true }
+		end		
+
 	end
 	describe "Board should not draw" do
 		describe "when four dots" do
@@ -168,6 +211,26 @@ describe TicTacToe do
 					[["X", "O", "X"],
 					["O", "O", "X"],
 					[".", ".", "."]]
+			$game.test_set_board(sample_board)
+			output = $game.draw?
+			subject { output }
+			specify { output should == false }
+		end	
+		describe "when two dots and there's still game" do
+			sample_board =
+					[["O", "X", "X"],
+					["O", "O", "X"],
+					["X", ".", "."]]
+			$game.test_set_board(sample_board)
+			output = $game.draw?
+			subject { output }
+			specify { output should == false }
+		end	
+		describe "when one dot and there's still game" do
+			sample_board =
+					[["X", "O", "O"],
+					["O", "O", "X"],
+					["X", ".", "X"]]
 			$game.test_set_board(sample_board)
 			output = $game.draw?
 			subject { output }
