@@ -1,17 +1,13 @@
 module TicTacToe
 
 	class Game
+		attr_accessor :board
 
 		def initialize
 			@board =																					# Start with an empty board (. = empty space)
 				[[".", ".", "."],
 				[".", ".", "."],
 				[".", ".", "."]]
-		end
-
-
-		def test_set_board board 														# Allow the board to be reset (for use by the spec)
-			@board = board
 		end
 
 
@@ -271,5 +267,4 @@ module TicTacToe
 end
 
 ##### TO-DO
-## * AI can go first or second at random + commit
 ## * AI is smart + commit
