@@ -106,8 +106,8 @@ module TicTacToe
 						checkSquare = board[i][1] if dim == "row"
 						checkSquare = board[1][i] if dim == "col"
 						checkSquare = board[1][1] if dim == "diag1" or dim == "diag2"
-						return false if count[dim][i]["X"] == 2 and checkSquare == "X" and count[dim][i]["."] == 1 and $curr_player == "O"
-						return false if count[dim][i]["O"] == 2 and checkSquare == "O" and count[dim][i]["."] == 1 and $curr_player == "X"
+						return false if count[dim][i]["X"] == 2 and checkSquare == "X" and count[dim][i]["."] == 1 and $current_player == "O"
+						return false if count[dim][i]["O"] == 2 and checkSquare == "O" and count[dim][i]["."] == 1 and $current_player == "X"
 					end
 				end
 
@@ -146,7 +146,7 @@ module TicTacToe
 
 		def initialize
 			$game = Game.new
-			$curr_player = ["O", "X"].sample								# Select a player to play first at random.
+			$current_player = ["O", "X"].sample								# Select a player to play first at random.
 																											# Keep track of current_player as a global variable so that Game and AI classes can have easy access to it.
 		end
 
@@ -163,12 +163,12 @@ module TicTacToe
 
 
 		def switch_player! 																# Method to switch the player.
-			$curr_player == "O" ? $curr_player = "X" : $curr_player = "O"
+			$current_player == "O" ? $current_player = "X" : $current_player = "O"
 		end
 
 
 		def process! plSquare															# Process the legal move.
-			$game.make_move!($curr_player, plSquare)				# Make the move on the board.
+			$game.make_move!($current_player, plSquare)				# Make the move on the board.
 			if $game.win?																		# Check board state for winner...
 				$game.print_board()
 				#{helper_display_cp_name()}
@@ -182,11 +182,11 @@ module TicTacToe
 					start_turn()
 				elsif $game_type == "AI"											# In a player vs. AI game, the AI moves and then switches back to the player and begins again.
 					
-					if $curr_player == "O"											# If AI to go...
+					if $current_player == "O"											# If AI to go...
 						switch_player!()													# ...Switch to AI
 						@AI.make_move!()													# ...AI makes move
 
-					elsif $curr_player == "X"										# If AI just went...
+					elsif $current_player == "X"										# If AI just went...
 						switch_player!()													# ...Switch back to human
 						start_turn()															# ...Start the turn for the human
 					end
@@ -221,7 +221,7 @@ module TicTacToe
 			elsif @input == "a"
 				@AI = AI.new																	# Create an AI to play against
 				$game_type = "AI" 
-				if $curr_player == "X"												# AI randomly selected to be first...
+				if $current_player == "X"												# AI randomly selected to be first...
 					@AI.make_move!()
 				end
 			end
@@ -233,7 +233,7 @@ module TicTacToe
 
 		def start_turn 																		# Method to implement the turn for the user (called by runner.rb)
 			$game.print_board()
-			puts helper_display_name($curr_player) + "... On which square number would you like to play?"
+			puts helper_display_name($current_player) + "... On which square number would you like to play?"
 
 			plSquare = STDIN.gets.chomp	 										# Get the move from the player via terminal.
 			
