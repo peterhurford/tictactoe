@@ -1,10 +1,6 @@
 require_relative '../lib/tictactoe'
 
 describe TicTacToe do
-	$game = TicTacToe::Game.new
-	$player = TicTacToe::Player.new
-	$AI = TicTacToe::AI.new($game, $player)
-	$current_player = "O"
 
 	describe "Board should win" do		
 		describe "in rows" do
@@ -13,8 +9,9 @@ describe TicTacToe do
 					[["X", "X", "X"],
 					[".", ".", "."],
 					[".", ".", "."]]
-				$game.board = sample_board
-				output = $game.win?
+				game = TicTacToe::Game.new
+				game.board = sample_board
+				output = game.win?
 				subject { output }
 				specify { output should == "X" }
 			end
@@ -23,8 +20,9 @@ describe TicTacToe do
 					[[".", ".", "."],
 					["X", "X", "X"],
 					[".", ".", "."]]
-				$game.board = sample_board
-				output = $game.win?
+				game = TicTacToe::Game.new
+				game.board = sample_board
+				output = game.win?
 				subject { output }
 				specify { output should == "X" }
 			end
@@ -33,8 +31,9 @@ describe TicTacToe do
 					[[".", ".", "."],
 					[".", ".", "."],
 					["X", "X", "X"]]
-				$game.board = sample_board
-				output = $game.win?
+				game = TicTacToe::Game.new
+				game.board = sample_board
+				output = game.win?
 				subject { output }
 				specify { output should == "X" }
 			end
@@ -46,8 +45,9 @@ describe TicTacToe do
 					[["O", ".", "."],
 					["O", ".", "."],
 					["O", ".", "."]]
-				$game.board = sample_board
-				output = $game.win?
+				game = TicTacToe::Game.new
+				game.board = sample_board
+				output = game.win?
 				subject { output }
 				specify { output should == "O" }
 			end
@@ -56,8 +56,9 @@ describe TicTacToe do
 					[[".", "O", "."],
 					[".", "O", "."],
 					[".", "O", "."]]
-				$game.board = sample_board
-				output = $game.win?
+				game = TicTacToe::Game.new
+				game.board = sample_board
+				output = game.win?
 				subject { output }
 				specify { output should == "O" }
 			end
@@ -66,8 +67,9 @@ describe TicTacToe do
 					[[".", ".", "O"],
 					[".", ".", "O"],
 					[".", ".", "O"]]
-				$game.board = sample_board
-				output = $game.win?
+				game = TicTacToe::Game.new
+				game.board = sample_board
+				output = game.win?
 				subject { output }
 				specify { output should == "O" }
 			end
@@ -79,8 +81,9 @@ describe TicTacToe do
 					[["O", ".", "."],
 					[".", "O", "."],
 					[".", ".", "O"]]
-				$game.board = sample_board
-				output = $game.win?
+				game = TicTacToe::Game.new
+				game.board = sample_board
+				output = game.win?
 				subject { output }
 				specify { output should == "O" }
 			end
@@ -89,8 +92,9 @@ describe TicTacToe do
 					[[".", ".", "X"],
 					[".", "X", "."],
 					["X", ".", "."]]
-				$game.board = sample_board
-				output = $game.win?
+				game = TicTacToe::Game.new
+				game.board = sample_board
+				output = game.win?
 				subject { output }
 				specify { output should == "X" }
 			end
@@ -102,8 +106,9 @@ describe TicTacToe do
 					[[".", ".", "X"],
 					[".", "X", "."],
 					[".", ".", "."]]
-				$game.board = sample_board
-				output = $game.win?
+				game = TicTacToe::Game.new
+				game.board = sample_board
+				output = game.win?
 				subject { output }
 				specify { output should == false }
 			end
@@ -116,8 +121,9 @@ describe TicTacToe do
 					[["O", "O", "X"],
 					["X", "X", "O"],
 					["O", "O", "X"]]
-			$game.board = sample_board
-			output = $game.draw?
+			game = TicTacToe::Game.new
+			game.board = sample_board
+			output = game.win?
 			subject { output }
 			specify { output should == true }
 		end
@@ -126,8 +132,9 @@ describe TicTacToe do
 					[["X", "O", "X"],
 					["O", "X", "O"],
 					["O", ".", "O"]]
-			$game.board = sample_board
-			output = $game.draw?
+			game = TicTacToe::Game.new
+			game.board = sample_board
+			output = game.draw?
 			subject { output }
 			specify { output should == true }
 		end
@@ -137,8 +144,9 @@ describe TicTacToe do
 					[["O", "O", "X"],
 					[".", "X", "O"],
 					["X", "O", "X"]]
-			$game.board = sample_board
-			output = $game.draw?
+			game = TicTacToe::Game.new
+			game.board = sample_board
+			output = game.draw?
 			subject { output }
 			specify { output should == true }
 		end
@@ -148,8 +156,9 @@ describe TicTacToe do
 					[["O", "X", "O"],
 					["X", "O", "."],
 					["X", "O", "X"]]
-			$game.board = sample_board
-			output = $game.draw?
+			game = TicTacToe::Game.new
+			game.board = sample_board
+			output = game.draw?
 			subject { output }
 			specify { output should == true }
 		end		
@@ -159,8 +168,9 @@ describe TicTacToe do
 					[["X", "O", "X"],
 					["X", "O", "."],
 					["O", "X", "."]]
-			$game.board = sample_board
-			output = $game.draw?
+			game = TicTacToe::Game.new
+			game.board = sample_board
+			output = game.draw?
 			subject { output }
 			specify { output should == true }
 		end
@@ -170,8 +180,9 @@ describe TicTacToe do
 					[["X", "X", "O"],
 					["O", "O", "X"],
 					["X", ".", "."]]
-			$game.board = sample_board
-			output = $game.draw?
+			game = TicTacToe::Game.new
+			game.board = sample_board
+			output = game.draw?
 			subject { output }
 			specify { output should == true }
 		end
@@ -181,8 +192,9 @@ describe TicTacToe do
 					[["O", "X", "O"],
 					[".", "O", "."],
 					["X", "O", "X"]]
-			$game.board = sample_board
-			output = $game.draw?
+			game = TicTacToe::Game.new
+			game.board = sample_board
+			output = game.draw?
 			subject { output }
 			specify { output should == true }
 		end
@@ -192,8 +204,9 @@ describe TicTacToe do
 					[["O", "O", "X"],
 					["X", "X", "O"],
 					["O", ".", "."]]
-			$game.board = sample_board
-			output = $game.draw?
+			game = TicTacToe::Game.new
+			game.board = sample_board
+			output = game.draw?
 			subject { output }
 			specify { output should == true }
 		end		
@@ -205,8 +218,9 @@ describe TicTacToe do
 					[["X", "O", "X"],
 					["O", "O", "."],
 					[".", ".", "."]]
-			$game.board = sample_board
-			output = $game.draw?
+			game = TicTacToe::Game.new
+			game.board = sample_board
+			output = game.draw?
 			subject { output }
 			specify { output should == false }
 		end
@@ -215,8 +229,9 @@ describe TicTacToe do
 					[["X", "O", "X"],
 					["O", "O", "X"],
 					[".", ".", "."]]
-			$game.board = sample_board
-			output = $game.draw?
+			game = TicTacToe::Game.new
+			game.board = sample_board
+			output = game.draw?
 			subject { output }
 			specify { output should == false }
 		end	
@@ -225,8 +240,9 @@ describe TicTacToe do
 					[["O", "X", "X"],
 					["O", "O", "X"],
 					["X", ".", "."]]
-			$game.board = sample_board
-			output = $game.draw?
+			game = TicTacToe::Game.new
+			game.board = sample_board
+			output = game.draw?
 			subject { output }
 			specify { output should == false }
 		end	
@@ -235,8 +251,9 @@ describe TicTacToe do
 					[["X", "O", "O"],
 					["O", "O", "X"],
 					["X", ".", "X"]]
-			$game.board = sample_board
-			output = $game.draw?
+			game = TicTacToe::Game.new
+			game.board = sample_board
+			output = game.draw?
 			subject { output }
 			specify { output should == false }
 		end	
@@ -250,8 +267,11 @@ describe TicTacToe do
 					[["X", "X", "."],
 					[".", ".", "."],
 					[".", ".", "."]]
-				$game.board = sample_board
-				output = $AI.think()
+				game = TicTacToe::Game.new
+				game.board = sample_board
+				player = TicTacToe::Player.new
+				AI = TicTacToe::AI.new(game, player)
+				output = AI.think()
 				subject { output }
 				specify { output should == 3 }
 			end
@@ -260,8 +280,11 @@ describe TicTacToe do
 					[[".", ".", "."],
 					["X", ".", "X"],
 					[".", ".", "."]]
-				$game.board = sample_board
-				output = $AI.think()
+				game = TicTacToe::Game.new
+				game.board = sample_board
+				player = TicTacToe::Player.new
+				AI = TicTacToe::AI.new(game, player)
+				output = AI.think()
 				subject { output }
 				specify { output should == 5 }
 			end
@@ -270,8 +293,11 @@ describe TicTacToe do
 					[[".", ".", "."],
 					[".", ".", "."],
 					[".", "X", "X"]]
-				$game.board = sample_board
-				output = $AI.think()
+				game = TicTacToe::Game.new
+				game.board = sample_board
+				player = TicTacToe::Player.new
+				AI = TicTacToe::AI.new(game, player)
+				output = AI.think()
 				subject { output }
 				specify { output should == 7 }
 			end
@@ -283,8 +309,11 @@ describe TicTacToe do
 					[[".", ".", "."],
 					["O", ".", "."],
 					["O", ".", "."]]
-				$game.board = sample_board
-				output = $AI.think()
+				game = TicTacToe::Game.new
+				game.board = sample_board
+				player = TicTacToe::Player.new
+				AI = TicTacToe::AI.new(game, player)
+				output = AI.think()
 				subject { output }
 				specify { output should == 1 }
 			end
@@ -293,8 +322,11 @@ describe TicTacToe do
 					[[".", "O", "."],
 					[".", ".", "."],
 					[".", "O", "."]]
-				$game.board = sample_board
-				output = $AI.think()
+				game = TicTacToe::Game.new
+				game.board = sample_board
+				player = TicTacToe::Player.new
+				AI = TicTacToe::AI.new(game, player)
+				output = AI.think()
 				subject { output }
 				specify { output should == 5 }
 			end
@@ -303,8 +335,11 @@ describe TicTacToe do
 					[[".", ".", "O"],
 					[".", ".", "O"],
 					[".", ".", "."]]
-				$game.board = sample_board
-				output = $AI.think()
+				game = TicTacToe::Game.new
+				game.board = sample_board
+				player = TicTacToe::Player.new
+				AI = TicTacToe::AI.new(game, player)
+				output = AI.think()
 				subject { output }
 				specify { output should == 9 }
 			end
@@ -316,8 +351,11 @@ describe TicTacToe do
 					[[".", ".", "."],
 					[".", "O", "."],
 					[".", ".", "O"]]
-				$game.board = sample_board
-				output = $AI.think()
+				game = TicTacToe::Game.new
+				game.board = sample_board
+				player = TicTacToe::Player.new
+				AI = TicTacToe::AI.new(game, player)
+				output = AI.think()
 				subject { output }
 				specify { output should == 1 }
 			end
@@ -326,8 +364,11 @@ describe TicTacToe do
 					[[".", ".", "X"],
 					[".", ".", "."],
 					["X", ".", "."]]
-				$game.board = sample_board
-				output = $AI.think()
+				game = TicTacToe::Game.new
+				game.board = sample_board
+				player = TicTacToe::Player.new
+				AI = TicTacToe::AI.new(game, player)
+				output = AI.think()
 				subject { output }
 				specify { output should == 5 }
 			end
@@ -336,8 +377,11 @@ describe TicTacToe do
 					[[".", ".", "X"],
 					[".", "X", "."],
 					[".", ".", "."]]
-				$game.board = sample_board
-				output = $AI.think()
+				game = TicTacToe::Game.new
+				game.board = sample_board
+				player = TicTacToe::Player.new
+				AI = TicTacToe::AI.new(game, player)
+				output = AI.think()
 				subject { output }
 				specify { output should == 7 }
 			end
