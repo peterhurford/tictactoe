@@ -46,17 +46,15 @@ module TicTacToe
 		def helper_count_positions mode
 			board = @board
 			total_dots = 0
+			dimensions = ["row", "col", "diag1", "diag2"]
+			types = ["X", "O", "."]
 
 			count = {}
-			count["row"] = {}
-			count["col"] = {}
-			count["diag1"] = {}
-			count["diag2"] = {}
-			for i in (0..2) do
-				count["row"][i] = {}	
-				count["col"][i] = {}	
-				count["diag1"][i] = {}	
-				count["diag2"][i] = {}	
+			dimensions.each do |dim|
+				count[dim] = {}
+				for i in (0..2) do
+					count[dim][i] = {}	
+				end
 			end
 
 			board.each do |row|
@@ -65,29 +63,21 @@ module TicTacToe
 				end
 			end
 
-			for i in (0..2) do
-				count["row"][i]["X"] = board[i].count { |cell| cell == "X" }
-				count["row"][i]["O"] = board[i].count { |cell| cell == "O" }
-				count["row"][i]["."] = board[i].count { |cell| cell == "." }
+			types.each do |t|
+				["row", "col"].each do |dim|
+					for i in (0..2) do
+						count[dim][i][t] = board[i].count { |cell| cell == t }
+					end
+					board = board.transpose
+				end		
+			end	
+
+			diag1 = [board[0][0], board[1][1], board[2][2]]
+			diag2 = [board[0][2], board[1][1], board[2][0]]
+			types.each do |t|
+				count["diag1"][0][t] = diag1.count { |cell| cell == t }
+				count["diag2"][0][t] = diag2.count { |cell| cell == t }
 			end
-
-			board = board.transpose
-
-			for i in (0..2) do
-				count["col"][i]["X"] = board[i].count { |cell| cell == "X" }
-				count["col"][i]["O"] = board[i].count { |cell| cell == "O" }
-				count["col"][i]["."] = board[i].count { |cell| cell == "." }
-			end
-
-			board = board.transpose
-
-			count["diag1"][0]["X"] = [board[0][0], board[1][1], board[2][2]].count { |cell| cell == "X" }
-			count["diag1"][0]["O"] = [board[0][0], board[1][1], board[2][2]].count { |cell| cell == "O" }
-			count["diag1"][0]["."] = [board[0][0], board[1][1], board[2][2]].count { |cell| cell == "." }
-
-			count["diag2"][0]["X"] = [board[0][2], board[1][1], board[2][0]].count { |cell| cell == "X" }
-			count["diag2"][0]["O"] = [board[0][2], board[1][1], board[2][0]].count { |cell| cell == "O" }
-			count["diag2"][0]["."] = [board[0][2], board[1][1], board[2][0]].count { |cell| cell == "." }
 
 			if mode == "wins"
 				for i in (0..2) do
@@ -98,27 +88,22 @@ module TicTacToe
 			elsif mode == "draw"
 				return false if total_dots >= 3
 				return true if total_dots == 0
-
-				for i in (0..2) do
-					return false if count["row"][i]["X"] == 2 and board[i][1] == "X" and count["row"][i]["."] == 1 and $curr_player == "O"
-					return false if count["row"][i]["O"] == 2 and board[i][1] == "O" and count["row"][i]["."] == 1 and $curr_player == "X"
-					return false if count["col"][i]["X"] == 2 and board[1][i] == "X" and count["col"][i]["."] == 1 and $curr_player == "O"
-					return false if count["col"][i]["O"] == 2 and board[1][i] == "O" and count["col"][i]["."] == 1 and $curr_player == "X"
-					return false if count["diag1"][0]["X"] == 2 and board[1][1] == "X" and count["diag1"][0]["."] == 1 and $curr_player == "O"
-					return false if count["diag1"][0]["O"] == 2 and board[1][1] == "O" and count["diag1"][0]["."] == 1 and $curr_player == "X"
-					return false if count["diag2"][0]["X"] == 2 and board[1][1] == "X" and count["diag2"][0]["."] == 1 and $curr_player == "O"
-					return false if count["diag2"][0]["O"] == 2 and board[1][1] == "O" and count["diag2"][0]["."] == 1 and $curr_player == "X"
+				dimensions.each do |dim|
+					for i in (0..2) do
+						checkSquare = board[i][1] if dim == "row"
+						checkSquare = board[1][i] if dim == "col"
+						checkSquare = board[1][1] if dim == "diag1" or dim == "diag2"
+						return false if count[dim][i]["X"] == 2 and checkSquare == "X" and count[dim][i]["."] == 1 and $curr_player == "O"
+						return false if count[dim][i]["O"] == 2 and checkSquare == "O" and count[dim][i]["."] == 1 and $curr_player == "X"
+					end
 				end
-
-				for i in (0..2) do
-					return true if count["row"][i]["."] == 1 and count["row"][i]["O"] == 1 and count["row"][i]["X"] == 1 and total_dots == 1
-					return true if count["col"][i]["."] == 1 and count["col"][i]["O"] == 1 and count["col"][i]["X"] == 1 and total_dots == 1
-					return true if count["diag1"][0]["."] == 1 and count["diag1"][i]["O"] == 1 and count["diag1"][0]["X"] == 1 and total_dots == 1
-					return true if count["diag2"][0]["."] == 1 and count["diag2"][i]["O"] == 1 and count["diag2"][0]["X"] == 1 and total_dots == 1
+				dimensions.each do |dim|
+					for i in (0..2) do
+						return true if count[dim][i]["."] == 1 and count[dim][i]["O"] == 1 and count[dim][i]["X"] == 1 and total_dots == 1
+					end
 				end
-
 				return true if total_dots == 2
-			
+
 			else
 				raise "Mode error".inspect
 			end
@@ -184,8 +169,6 @@ module TicTacToe
 end
 
 ##### TO-DO
-## * Write tests + commit
-## * Refactor code + commit
 ## * Code comments + commit
 ## * 4 dot draw detection + commit
 ## * Play against other person or play against AI + commit
