@@ -1,8 +1,6 @@
 require_relative '../lib/tictactoe'
 
 describe TicTacToe do
-	$current_player = "O"
-
 	describe "Board should win" do		
 		describe "in rows" do
 			describe "top row" do
