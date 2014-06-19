@@ -122,7 +122,7 @@ describe TicTacToe do
 					["O", "O", "X"]]
 			game = TicTacToe::Game.new
 			game.board = sample_board
-			output = game.win?
+			output = game.draw?
 			subject { output }
 			specify { output should == true }
 		end
