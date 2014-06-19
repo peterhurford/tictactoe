@@ -29,46 +29,95 @@ module TicTacToe
 
 
 		def draw?
-			for i in (0..2) do
-				for j in (0..2) do
-					return false if @board[i][j] == "."
-				end
-			end
-			true
+			helper_count_positions("draw")
 		end
 
 
 		def win?
-			board = @board
+			helper_count_positions("wins")
+		end
 
-			2.times do
-				count_Od = 0
-				count_Xd = 0
-				count_Ord = 0
-				count_Xrd = 0
+
+		def helper_count_positions mode
+			board = @board
+			total_dots = 0
+
+			count = {}
+			count["row"] = {}
+			count["col"] = {}
+			count["diag1"] = {}
+			count["diag2"] = {}
+			for i in (0..2) do
+				count["row"][i] = {}	
+				count["col"][i] = {}	
+				count["diag1"][i] = {}	
+				count["diag2"][i] = {}	
+			end
+
+			board.each do |row|
+				row.each do |cell|
+					total_dots += 1 if cell == "."
+				end
+			end
+
+			for i in (0..2) do
+				count["row"][i]["X"] = board[i].count { |cell| cell == "X" }
+				count["row"][i]["O"] = board[i].count { |cell| cell == "O" }
+				count["row"][i]["."] = board[i].count { |cell| cell == "." }
+			end
+
+			board = board.transpose
+
+			for i in (0..2) do
+				count["col"][i]["X"] = board[i].count { |cell| cell == "X" }
+				count["col"][i]["O"] = board[i].count { |cell| cell == "O" }
+				count["col"][i]["."] = board[i].count { |cell| cell == "." }
+			end
+
+			count["diag1"][0]["X"] = [board[0][0], board[1][1], board[2][2]].count { |cell| cell == "X" }
+			count["diag1"][0]["O"] = [board[0][0], board[1][1], board[2][2]].count { |cell| cell == "O" }
+			count["diag1"][0]["."] = [board[0][0], board[1][1], board[2][2]].count { |cell| cell == "." }
+
+			count["diag2"][0]["X"] = [board[0][2], board[1][1], board[2][0]].count { |cell| cell == "X" }
+			count["diag2"][0]["O"] = [board[0][2], board[1][1], board[2][0]].count { |cell| cell == "O" }
+			count["diag2"][0]["."] = [board[0][2], board[1][1], board[2][0]].count { |cell| cell == "." }
+
+			if mode == "wins"
+				for i in (0..2) do
+					return "X" if count["row"][i]["X"] == 3 or count["col"][i]["X"] == 3 or count["diag1"][0]["X"] == 3 or count["diag2"][0]["X"] == 3
+					return "O" if count["row"][i]["O"] == 3 or count["col"][i]["O"] == 3 or count["diag1"][0]["O"] == 3 or count["diag2"][0]["O"] == 3
+				end
+
+			elsif mode == "draw"
+				return false if total_dots >= 4
+				return true if total_dots == 0
 
 				for i in (0..2) do
-					count_O = 0
-					count_X = 0
-					for j in (0..2) do
-						count_O += 1 if board[i][j] == "O"
-						count_X += 1 if board[i][j] == "X"
-						if j == 0
-							count_Od += 1 if board[i][i] == "O"
-							count_Xd += 1 if board[i][i] == "X"
-							count_Ord += 1 if board[i][2-i] == "O"
-							count_Xrd += 1 if board[i][2-i] == "X"
-						end
-					end
-					return "O" if count_O == 3
-					return "X" if count_X == 3
+					return true if count["row"][i]["."] == 1 and count["row"][i]["O"] == 1 and count["row"][i]["X"] == 1 and total_dots == 1
+					return true if count["col"][i]["."] == 1 and count["col"][i]["O"] == 1 and count["col"][i]["X"] == 1 and total_dots == 1
+					return true if count["diag1"][i]["."] == 1 and count["diag1"][i]["O"] == 1 and count["diag1"][i]["X"] == 1 and total_dots == 1
+					return true if count["diag2"][i]["."] == 1 and count["diag2"][i]["O"] == 1 and count["diag2"][i]["X"] == 1 and total_dots == 1
 				end
-				return "O" if count_Od == 3
-				return "X" if count_Xd == 3
-				return "O" if count_Ord == 3
-				return "X" if count_Xrd == 3
-				board = @board.transpose
+
+				for i in (0..2) do
+					return false if count["row"][i]["."] == 2 and total_dots == 2 and ((count["row"][i]["X"] == 1 and $curr_player == "O") or (count["row"][i]["O"] == 1 and $curr_player == "X"))
+					return false if count["col"][i]["."] == 2 and total_dots == 2 and ((count["col"][i]["X"] == 1 and $curr_player == "O") or (count["col"][i]["O"] == 1 and $curr_player == "X"))
+					return false if count["diag1"][i]["."] == 2 and total_dots == 2 and ((count["diag1"][i]["X"] == 1 and $curr_player == "O") or (count["diag1"][i]["O"] == 1 and $curr_player == "X"))
+					return false if count["diag2"][i]["."] == 2 and total_dots == 2 and ((count["diag2"][i]["X"] == 1 and $curr_player == "O") or (count["diag2"][i]["O"] == 1 and $curr_player == "X"))
+				end
+				return true if total_dots == 2
+
+				three_dots_in_line = false
+				for i in (0..2) do
+					three_dots_in_line = true if count["row"][i]["."] == 3 or count["col"][i]["."] == 3 or count["diag1"][0]["."] == 3 or count["diag2"][0]["."] == 3
+				end
+				puts three_dots_in_line.to_s + " " + total_dots.to_s + " "
+				return true if three_dots_in_line == true and total_dots == 3				
+			
+			else
+				raise "Mode error".inspect
 			end
+
 			return false
 		end
 
@@ -89,28 +138,28 @@ module TicTacToe
 	class Game
 		def initialize
 			@game = Board.new
-			@curr_player = "O"
+			$curr_player = "O"
 			start_turn()
 		end
 
 
 		def switch_player!
-			@curr_player == "O" ? @curr_player = "X" : @curr_player = "O"
+			$curr_player == "O" ? $curr_player = "X" : $curr_player = "O"
 		end
 
 
 		def start_turn
 			@game.print_board()
-			puts "Player #{@curr_player}... On which square number would you like to play?"
+			puts "Player #{$curr_player}... On which square number would you like to play?"
 			plSquare = gets.chomp
-			valid = "0123456789".split("")
+			valid = "123456789".split("")
 			
 			unless valid.include? plSquare
 				puts "Please enter either a number 1-9."
 				start_turn()
 			end
 			if @game.legal_move?(plSquare)
-				@game.make_move!(@curr_player, plSquare)
+				@game.make_move!($curr_player, plSquare)
 				if @game.win?
 					@game.print_board()
 					puts "Congratulations... #{@game.win?} wins!"
@@ -135,6 +184,10 @@ game = TicTacToe::Game.new
 
 
 ##### TO-DO
-## * Earlier draw detection.
-## * Play against other person or play against AI.
-## * On Git.
+## * Clean code
+## * Commit
+## * Write tests + commit
+## * Refactor code + commit
+## * Code comments + commit
+## * 4 dot draw detection + commit
+## * Play against other person or play against AI + commit
