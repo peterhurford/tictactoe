@@ -2,12 +2,14 @@ module TicTacToe
 
 	class Game
 		attr_accessor :board
+		attr_accessor :current_player
 
 		def initialize
 			@board =																					# Start with an empty board (. = empty space)
 				[[".", ".", "."],
 				[".", ".", "."],
 				[".", ".", "."]]
+			@current_player = ["O", "X"].sample							# Select a player to play first at random.
 		end
 
 
@@ -42,7 +44,7 @@ module TicTacToe
 
 
 		def helper_determine_game_state mode 								# Helper method to do the work of determining the game state for win or draw
-																														# (Mode must be "wins" or "draw" or an error is raised.)
+																														# (Mode must be "wins", "draw", or "AI" or an error is raised.)
 
 			board = @board 																		# Create a local instance of the board variable so we can modify it
 
@@ -102,8 +104,8 @@ module TicTacToe
 						checkSquare = board[i][1] if dim == "row"
 						checkSquare = board[1][i] if dim == "col"
 						checkSquare = board[1][1] if dim == "diag1" or dim == "diag2"
-						return false if count[dim][i]["X"] == 2 and checkSquare == "X" and count[dim][i]["."] == 1 and $current_player == "O"
-						return false if count[dim][i]["O"] == 2 and checkSquare == "O" and count[dim][i]["."] == 1 and $current_player == "X"
+						return false if count[dim][i]["X"] == 2 and checkSquare == "X" and count[dim][i]["."] == 1 and @current_player == "O"
+						return false if count[dim][i]["O"] == 2 and checkSquare == "O" and count[dim][i]["."] == 1 and @current_player == "X"
 					end
 				end
 
@@ -115,6 +117,10 @@ module TicTacToe
 				end
 				return true if total_dots == 2
 
+			elsif mode == "AI"															# AI can request the count hash (so it doesn't need to be coded elsewhere)
+				return count
+
+			
 			else																						# If the method variable is something other than "wins" or "draw", raise an error.
 				raise "Mode error".inspect
 			end
@@ -139,16 +145,16 @@ module TicTacToe
 
 
 	class Player
+		attr_accessor :current_player
 
 		def initialize
-			$game = Game.new
-			$current_player = ["O", "X"].sample								# Select a player to play first at random.
-																											# Keep track of current_player as a global variable so that Game and AI classes can have easy access to it.
+			@game = Game.new
+			@game_over = false
 		end
 
 
 		def helper_display_name name											# Helper method to turn the player variable into a displayable name based on game type
-			if $game_type == "AI"
+			if @game_type == "AI"
 				disp = "Human" if name == "O"
 				disp = "The AI" if name == "X"
 			else
@@ -159,36 +165,40 @@ module TicTacToe
 
 
 		def switch_player! 																# Method to switch the player.
-			$current_player == "O" ? $current_player = "X" : $current_player = "O"
+			@game.current_player == "O" ? @game.current_player = "X" : @game.current_player = "O"
 		end
 
 
-		def process! plSquare															# Process the legal move.
-			$game.make_move!($current_player, plSquare)				# Make the move on the board.
-			if $game.win?																		# Check board state for winner...
-				$game.print_board()
-				#{helper_display_cp_name()}
-				puts "Congratulations... " + helper_display_name($game.win?) + " wins!"
-			elsif $game.draw? 															# Check board state for a draw...
-				$game.print_board()
-				puts "The game ends in a draw!"
-			else 																						# Otherwise...
-				if $game_type == "player"											# In a player vs. player game, the game simply switches to the next player and begins again.
-					switch_player!()
-					start_turn()
-				elsif $game_type == "AI"											# In a player vs. AI game, the AI moves and then switches back to the player and begins again.
-					
-					if $current_player == "O"											# If AI to go...
-						switch_player!()													# ...Switch to AI
-						@AI.make_move!()													# ...AI makes move
+		def process! plSquare																			# Process the legal move.
+			if @game_over == false
+				@game.make_move!(@game.current_player, plSquare)			# Make the move on the board.
+				if @game.win?																					# Check board state for winner...
+					@game.print_board()
+					#{helper_display_cp_name()}
+					puts "Congratulations... " + helper_display_name(@game.win?) + " wins!"
+					@game_over = true
+				elsif @game.draw? 															# Check board state for a draw...
+					@game.print_board()
+					puts "The game ends in a draw!"
+					@game_over = true
+				else 																						# Otherwise...
+					if @game_type == "player"											# In a player vs. player game, the game simply switches to the next player and begins again.
+						switch_player!()
+						start_turn()
+					elsif @game_type == "AI"											# In a player vs. AI game, the AI moves and then switches back to the player and begins again.
+						
+						if @game.current_player == "O"							# If AI to go...
+							switch_player!()													# ...Switch to AI
+							@AI.make_move!()													# ...AI makes move
 
-					elsif $current_player == "X"										# If AI just went...
-						switch_player!()													# ...Switch back to human
-						start_turn()															# ...Start the turn for the human
+						elsif @game.current_player == "X"						# If AI just went...
+							switch_player!()													# ...Switch back to human
+							start_turn()															# ...Start the turn for the human
+						end
+
+					else 																					# If the game type isn't recognized, raise an error.
+						raise "Game Type Error".inspect
 					end
-
-				else 																					# If the game type isn't recognized, raise an error.
-					raise "Game Type Error".inspect
 				end
 			end
 		end
@@ -213,11 +223,11 @@ module TicTacToe
 
 			# Set game mode
 			if @input == "p"
-				$game_type = "player"
+				@game_type = "player"
 			elsif @input == "a"
-				@AI = AI.new																	# Create an AI to play against
-				$game_type = "AI" 
-				if $current_player == "X"												# AI randomly selected to be first...
+				@AI = AI.new(@game, self)											# Create an AI to play against -- pass it the @game object and this player instance
+				@game_type = "AI" 
+				if @game.current_player == "X"								# AI randomly selected to be first...
 					@AI.make_move!()
 				end
 			end
@@ -228,22 +238,24 @@ module TicTacToe
 
 
 		def start_turn 																		# Method to implement the turn for the user (called by runner.rb)
-			$game.print_board()
-			puts helper_display_name($current_player) + "... On which square number would you like to play?"
+			if @game_over == false
+				@game.print_board()
+				puts helper_display_name(@game.current_player) + "... On which square number would you like to play?"
 
-			plSquare = STDIN.gets.chomp	 										# Get the move from the player via terminal.
-			
-			valid = "123456789".split("")										# Validate the input, reject it if not 1-9, and start over asking for input again.
-			unless valid.include? plSquare
-				puts "Please enter either a number 1-9."
-				start_turn()
-			end
+				plSquare = STDIN.gets.chomp	 										# Get the move from the player via terminal.
+				
+				valid = "123456789".split("")										# Validate the input, reject it if not 1-9, and start over asking for input again.
+				unless valid.include? plSquare
+					puts "Please enter either a number 1-9."
+					start_turn()
+				end
 
-			if $game.legal_move?(plSquare) 									# Validate the input to see if the move is legal.
-				process!(plSquare)														# If the move is legal, process it.
-			else																						# If not, reject it, and start over.
-				puts "Sorry, that square is already taken.  Try again?"
-				start_turn()
+				if @game.legal_move?(plSquare) 									# Validate the input to see if the move is legal.
+					process!(plSquare)														# If the move is legal, process it.
+				else																						# If not, reject it, and start over.
+					puts "Sorry, that square is already taken.  Try again?"
+					start_turn()
+				end
 			end
 		end
 	end
@@ -251,16 +263,77 @@ module TicTacToe
 
 
 	class AI
+		def initialize game, player
+			@game = game 																			# AI needs a copy of the game and player objects
+			@player = player
+		end
+
 		def make_move!
 			puts "AI to go..."
+
 			move_made = false
 			while move_made == false
-				move = Random.new.rand(1..9)
-				if $game.legal_move?(move)
-					$player.process!(move)
+				move = think()
+				move = Random.new.rand(1..9) if move == false
+				if @game.legal_move?(move)
+					@player.process!(move)
 					move_made = true
 				end
 			end
+		end
+
+		def think
+			# Implement Newell and Simon's (1972) tic-tac-toe algorithm. <https://en.wikipedia.org/wiki/Tic-tac-toe#Strategy>
+
+			# Collect data
+			board = @game.board
+			dimensions = ["row", "col", "diag1", "diag2"]
+			count = @game.helper_determine_game_state("AI")
+
+			# Step 1: Win. (If the AI has two in a row, the AI will place a third to get three in a row.)
+			select = false
+			dimensions.each do |dim|												# Determine if AI has two in a row
+				for i in (0..2) do
+					select = [dim, i] if count[dim][i]["X"] == 2
+				end
+			end
+			if select 																			# If so, determine and place the third...
+				if select[0] == "row"
+					for i in (0..2) do
+						return select[1]*3 + i+1 if board[select[1]][i] == "."
+					end
+				elsif select[0] == "col"
+					for i in (0..2) do
+						return i*3 + select[1]+1 if board[i][select[1]] == "."
+					end
+				elsif select[0] == "diag1"
+					for i in (0..2) do
+						return select[1]*3 + select[1]+1 if board[select[1]][select[1]] == "."
+					end
+				elsif select[0] == "diag2"
+					for i in (0..2) do
+						return select[1]*3 + 2-select[1]+1 if board[select[1]][2-select[1]] == "."
+					end
+				end
+			end
+			false
+
+			# Step 2: Block. If the opponent has two in a row, the AI must play the third themself to block the opponent.
+
+			# Step 3: Fork. Create an opportunity where the AI has two threats to win (two non-blocked lines of 2).
+
+			# Step 4: Block an opponent's fork.  The AI should create two in a row to force the opponent into defending, as long as it doesn't result in them creating a fork.
+			# (For example, if "X" has a corner, "O" has the center, and "X" has the opposite corner as well, "O" must not play a corner in order to win, as playing a corner in this scenario creates a fork for "X" to win.)
+
+			# Step 5: Center. AI marks the dead center, if it is available.
+
+			# Step 6: Opposite Corner. If the opponent is in a corner, the AI plays the opposite corner.
+
+			# Step 7: Empty Corner. The AI plays in a corner square.
+
+			# Step 8: Empty Side. The AI plays in the middle of any of the four sides.
+
+			# Step 9: Open. If playing first, pick a random corner.
 		end
 	end
 

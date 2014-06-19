@@ -2,7 +2,10 @@ require_relative '../lib/tictactoe'
 
 describe TicTacToe do
 	$game = TicTacToe::Game.new
+	$player = TicTacToe::Player.new
+	$AI = TicTacToe::AI.new($game, $player)
 	$current_player = "O"
+
 	describe "Board should win" do		
 		describe "in rows" do
 			describe "top row" do
@@ -237,6 +240,108 @@ describe TicTacToe do
 			subject { output }
 			specify { output should == false }
 		end	
+	end
+
+
+	describe "AI should win" do		
+		describe "in rows" do
+			describe "top row" do
+				sample_board =
+					[["X", "X", "."],
+					[".", ".", "."],
+					[".", ".", "."]]
+				$game.board = sample_board
+				output = $AI.think()
+				subject { output }
+				specify { output should == 3 }
+			end
+			describe "middle row" do
+				sample_board =
+					[[".", ".", "."],
+					["X", ".", "X"],
+					[".", ".", "."]]
+				$game.board = sample_board
+				output = $AI.think()
+				subject { output }
+				specify { output should == 5 }
+			end
+			describe "bottom row" do
+				sample_board =
+					[[".", ".", "."],
+					[".", ".", "."],
+					[".", "X", "X"]]
+				$game.board = sample_board
+				output = $AI.think()
+				subject { output }
+				specify { output should == 7 }
+			end
+		end
+
+		describe "in columns" do
+			describe "left column" do
+				sample_board =
+					[[".", ".", "."],
+					["O", ".", "."],
+					["O", ".", "."]]
+				$game.board = sample_board
+				output = $AI.think()
+				subject { output }
+				specify { output should == 1 }
+			end
+			describe "middle column" do
+				sample_board =
+					[[".", "O", "."],
+					[".", ".", "."],
+					[".", "O", "."]]
+				$game.board = sample_board
+				output = $AI.think()
+				subject { output }
+				specify { output should == 5 }
+			end
+			describe "right column" do
+				sample_board =
+					[[".", ".", "O"],
+					[".", ".", "O"],
+					[".", ".", "."]]
+				$game.board = sample_board
+				output = $AI.think()
+				subject { output }
+				specify { output should == 9 }
+			end
+		end
+
+		describe "in diagonals" do
+			describe "diagonal1" do
+				sample_board =
+					[[".", ".", "."],
+					[".", "O", "."],
+					[".", ".", "O"]]
+				$game.board = sample_board
+				output = $AI.think()
+				subject { output }
+				specify { output should == 1 }
+			end
+			describe "diagonal2" do
+				sample_board =
+					[[".", ".", "X"],
+					[".", ".", "."],
+					["X", ".", "."]]
+				$game.board = sample_board
+				output = $AI.think()
+				subject { output }
+				specify { output should == 5 }
+			end
+			describe "diagonal2 B" do
+				sample_board =
+					[[".", ".", "X"],
+					[".", "X", "."],
+					[".", ".", "."]]
+				$game.board = sample_board
+				output = $AI.think()
+				subject { output }
+				specify { output should == 7 }
+			end
+		end
 	end
 
 end
