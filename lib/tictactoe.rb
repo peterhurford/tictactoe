@@ -146,7 +146,8 @@ module TicTacToe
 
 		def initialize
 			$game = Game.new
-			$curr_player = "O"															# Keep track of current_player as a global variable so that Board can have easy access to it.
+			$curr_player = ["O", "X"].sample								# Select a player to play first at random.
+																											# Keep track of current_player as a global variable so that Game and AI classes can have easy access to it.
 		end
 
 
@@ -183,7 +184,6 @@ module TicTacToe
 					
 					if $curr_player == "O"											# If AI to go...
 						switch_player!()													# ...Switch to AI
-						puts "AI to go..."
 						@AI.make_move!()													# ...AI makes move
 
 					elsif $curr_player == "X"										# If AI just went...
@@ -221,7 +221,12 @@ module TicTacToe
 			elsif @input == "a"
 				@AI = AI.new																	# Create an AI to play against
 				$game_type = "AI" 
+				if $curr_player == "X"												# AI randomly selected to be first...
+					@AI.make_move!()
+				end
 			end
+
+
 			start_turn()																		# Start the first turn
 		end
 
@@ -251,6 +256,7 @@ module TicTacToe
 
 	class AI
 		def make_move!
+			puts "AI to go..."
 			move_made = false
 			while move_made == false
 				move = Random.new.rand(1..9)

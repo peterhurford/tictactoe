@@ -2,7 +2,7 @@ require_relative '../lib/tictactoe'
 
 describe TicTacToe do
 	$game = TicTacToe::Game.new
-	$curr_player = "O"
+	$current_player = "O"
 	describe "Board should win" do		
 		describe "in rows" do
 			describe "top row" do
