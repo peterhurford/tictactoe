@@ -94,7 +94,7 @@ module TicTacToe
 				end
 
 			elsif mode == "draw"
-				return false if total_dots >= 4
+				return false if total_dots >= 3
 				return true if total_dots == 0
 
 				for i in (0..2) do
@@ -110,13 +110,7 @@ module TicTacToe
 					return false if count["diag1"][i]["."] == 2 and total_dots == 2 and ((count["diag1"][i]["X"] == 1 and $curr_player == "O") or (count["diag1"][i]["O"] == 1 and $curr_player == "X"))
 					return false if count["diag2"][i]["."] == 2 and total_dots == 2 and ((count["diag2"][i]["X"] == 1 and $curr_player == "O") or (count["diag2"][i]["O"] == 1 and $curr_player == "X"))
 				end
-				return true if total_dots == 2
-
-				three_dots_in_line = false
-				for i in (0..2) do
-					three_dots_in_line = true if count["row"][i]["."] == 3 or count["col"][i]["."] == 3 or count["diag1"][0]["."] == 3 or count["diag2"][0]["."] == 3
-				end
-				return true if three_dots_in_line == true and total_dots == 3				
+				return true if total_dots == 2			
 			
 			else
 				raise "Mode error".inspect
