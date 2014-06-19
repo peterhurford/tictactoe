@@ -79,6 +79,8 @@ module TicTacToe
 				count["col"][i]["."] = board[i].count { |cell| cell == "." }
 			end
 
+			board = board.transpose
+
 			count["diag1"][0]["X"] = [board[0][0], board[1][1], board[2][2]].count { |cell| cell == "X" }
 			count["diag1"][0]["O"] = [board[0][0], board[1][1], board[2][2]].count { |cell| cell == "O" }
 			count["diag1"][0]["."] = [board[0][0], board[1][1], board[2][2]].count { |cell| cell == "." }
@@ -98,19 +100,24 @@ module TicTacToe
 				return true if total_dots == 0
 
 				for i in (0..2) do
-					return true if count["row"][i]["."] == 1 and count["row"][i]["O"] == 1 and count["row"][i]["X"] == 1 and total_dots == 1
-					return true if count["col"][i]["."] == 1 and count["col"][i]["O"] == 1 and count["col"][i]["X"] == 1 and total_dots == 1
-					return true if count["diag1"][i]["."] == 1 and count["diag1"][i]["O"] == 1 and count["diag1"][i]["X"] == 1 and total_dots == 1
-					return true if count["diag2"][i]["."] == 1 and count["diag2"][i]["O"] == 1 and count["diag2"][i]["X"] == 1 and total_dots == 1
+					return false if count["row"][i]["X"] == 2 and board[i][1] == "X" and count["row"][i]["."] == 1 and $curr_player == "O"
+					return false if count["row"][i]["O"] == 2 and board[i][1] == "O" and count["row"][i]["."] == 1 and $curr_player == "X"
+					return false if count["col"][i]["X"] == 2 and board[1][i] == "X" and count["col"][i]["."] == 1 and $curr_player == "O"
+					return false if count["col"][i]["O"] == 2 and board[1][i] == "O" and count["col"][i]["."] == 1 and $curr_player == "X"
+					return false if count["diag1"][0]["X"] == 2 and board[1][1] == "X" and count["diag1"][0]["."] == 1 and $curr_player == "O"
+					return false if count["diag1"][0]["O"] == 2 and board[1][1] == "O" and count["diag1"][0]["."] == 1 and $curr_player == "X"
+					return false if count["diag2"][0]["X"] == 2 and board[1][1] == "X" and count["diag2"][0]["."] == 1 and $curr_player == "O"
+					return false if count["diag2"][0]["O"] == 2 and board[1][1] == "O" and count["diag2"][0]["."] == 1 and $curr_player == "X"
 				end
 
 				for i in (0..2) do
-					return false if count["row"][i]["."] == 2 and total_dots == 2 and ((count["row"][i]["X"] == 1 and $curr_player == "O") or (count["row"][i]["O"] == 1 and $curr_player == "X"))
-					return false if count["col"][i]["."] == 2 and total_dots == 2 and ((count["col"][i]["X"] == 1 and $curr_player == "O") or (count["col"][i]["O"] == 1 and $curr_player == "X"))
-					return false if count["diag1"][i]["."] == 2 and total_dots == 2 and ((count["diag1"][i]["X"] == 1 and $curr_player == "O") or (count["diag1"][i]["O"] == 1 and $curr_player == "X"))
-					return false if count["diag2"][i]["."] == 2 and total_dots == 2 and ((count["diag2"][i]["X"] == 1 and $curr_player == "O") or (count["diag2"][i]["O"] == 1 and $curr_player == "X"))
+					return true if count["row"][i]["."] == 1 and count["row"][i]["O"] == 1 and count["row"][i]["X"] == 1 and total_dots == 1
+					return true if count["col"][i]["."] == 1 and count["col"][i]["O"] == 1 and count["col"][i]["X"] == 1 and total_dots == 1
+					return true if count["diag1"][0]["."] == 1 and count["diag1"][i]["O"] == 1 and count["diag1"][0]["X"] == 1 and total_dots == 1
+					return true if count["diag2"][0]["."] == 1 and count["diag2"][i]["O"] == 1 and count["diag2"][0]["X"] == 1 and total_dots == 1
 				end
-				return true if total_dots == 2			
+
+				return true if total_dots == 2
 			
 			else
 				raise "Mode error".inspect
