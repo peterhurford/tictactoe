@@ -1,6 +1,6 @@
 module TicTacToe
 
-	class Board
+	class Game
 
 		def initialize
 			@board =																					# Start with an empty board (. = empty space)
@@ -142,10 +142,10 @@ module TicTacToe
 
 
 
-	class Game
+	class Player
 
 		def initialize
-			@game = Board.new
+			$game = Game.new
 			$curr_player = "O"															# Keep track of current_player as a global variable so that Board can have easy access to it.
 		end
 
@@ -155,8 +155,67 @@ module TicTacToe
 		end
 
 
+		def process! plSquare															# Process the legal move.
+			$game.make_move!($curr_player, plSquare)				# Make the move on the board.
+			if $game.win?																		# Check board state for winner...
+				$game.print_board()
+				puts "Congratulations... #{$game.win?} wins!"
+			elsif $game.draw? 															# Check board state for a draw...
+				$game.print_board()
+				puts "The game ends in a draw!"
+			else 																						# Otherwise...
+				if $game_type == "player"											# In a player vs. player game, the game simply switches to the next player and begins again.
+					switch_player!()
+					start_turn()
+				elsif $game_type == "AI"											# In a player vs. AI game, the AI moves and then switches back to the player and begins again.
+					
+					if $curr_player == "O"											# If AI to go...
+						switch_player!()													# ...Switch to AI
+						puts "AI to go..."
+						@AI.make_move!()													# ...AI makes move
+
+					elsif $curr_player == "X"										# If AI just went...
+						switch_player!()													# ...Switch back to human
+						start_turn()															# ...Start the turn for the human
+					end
+
+				else 																					# If the game type isn't recognized, raise an error.
+					raise "Game Type Error".inspect
+				end
+			end
+		end
+
+
+		def start_game 																		# Method to start the game.
+			puts "Welcome to Ruby Tic-Tac-Toe!"
+			
+			# Get input from player on game mode
+			valid = false
+			while valid == false do
+				puts "To play against another person, type P.  To play against the AI, type A."
+				@input = STDIN.gets.chomp.downcase
+
+				valid = "pa".split("")
+				if valid.include? @input
+					valid = true
+				else
+					puts "That input is not valid."
+				end
+			end
+
+			# Set game mode
+			if @input == "p"
+				$game_type = "player"
+			elsif @input == "a"
+				@AI = AI.new																	# Create an AI to play against
+				$game_type = "AI" 
+			end
+			start_turn()																		# Start the first turn
+		end
+
+
 		def start_turn 																		# Method to implement the turn for the user (called by runner.rb)
-			@game.print_board()
+			$game.print_board()
 			puts "Player #{$curr_player}... On which square number would you like to play?"
 			plSquare = STDIN.gets.chomp	 										# Get the move from the player via terminal.
 			
@@ -166,31 +225,34 @@ module TicTacToe
 				start_turn()
 			end
 
-			if @game.legal_move?(plSquare) 									# Validate the input to see if the move is legal.
+			if $game.legal_move?(plSquare) 									# Validate the input to see if the move is legal.
 				process!(plSquare)														# If the move is legal, process it.
 			else																						# If not, reject it, and start over.
 				puts "Sorry, that square is already taken.  Try again?"
 				start_turn()
 			end
 		end
+	end
 
 
-		def process! plSquare															# Process the legal move.
-			@game.make_move!($curr_player, plSquare)				# Make the move on the board.
-			if @game.win?																		# Check board state for winner...
-				@game.print_board()
-				puts "Congratulations... #{@game.win?} wins!"
-			elsif @game.draw? 															# Check board state for a draw...
-				@game.print_board()
-				puts "The game ends in a draw!"
-			else 																						# Otherwise, the game switches to the next player and begins again.
-				switch_player!()
-				start_turn()
+
+	class AI
+		def make_move!
+			move_made = false
+			while move_made == false
+				puts "Thinking..."
+				move = Random.new.rand(1..9)
+				if $game.legal_move?(move)
+					$player.process!(move)
+					move_made = true
+				end
 			end
 		end
 	end
+
 end
 
 ##### TO-DO
-## * 4 dot draw detection + commit
-## * Play against other person or play against AI + commit
+## * AI moves randomly + commit
+## * AI can go first or second at random + commit
+## * AI is smart + commit
