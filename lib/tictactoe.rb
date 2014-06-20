@@ -208,7 +208,7 @@ module TicTacToe
       
       # Get input from player on game mode
       valid = false
-      while valid == false do
+      until valid == true
         puts "To play against another person, type P.  To play against the AI, type A."
         @input = STDIN.gets.chomp.downcase
 
