@@ -1,7 +1,7 @@
 require_relative '../lib/tictactoe'
 
 describe TicTacToe do
-	describe "Board should win" do	
+	describe "Board should win" do		
 		describe "in rows" do
 			describe "top row" do
 				sample_board =
