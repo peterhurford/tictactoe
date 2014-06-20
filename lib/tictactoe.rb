@@ -300,23 +300,19 @@ module TicTacToe
 			if select 																			# If so, determine and place the third...
 				if select[0] == "row"
 					for i in (0..2) do
-						puts select[1].to_s + " " + i.to_s + " " + board[select[1]][i]
 						return select[1]*3 + i+1 if board[select[1]][i] == "."
 					end
 				elsif select[0] == "col"
 					for i in (0..2) do
-						puts select[1].to_s + " " + i.to_s + " " + board[i][select[1]]
 						return i*3 + select[1]+1 if board[i][select[1]] == "."
 					end
 				elsif select[0] == "diag1"
 					for i in (0..2) do
-						puts select[1].to_s + " " + i.to_s + " " + board[select[1]][select[1]]
-						return select[1]*3 + select[1]+1 if board[select[1]][select[1]] == "."
+						return i*3 + i+1 if board[i][i] == "."
 					end
 				elsif select[0] == "diag2"
 					for i in (0..2) do
-						puts select[1].to_s + " " + i.to_s + " " + board[select[1]][2-select[1]]
-						return select[1]*3 + 2-select[1]+1 if board[select[1]][2-select[1]] == "."
+						return i*3 + 2-i+1 if board[i][2-i] == "."
 					end
 				end
 			end

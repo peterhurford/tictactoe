@@ -269,8 +269,8 @@ describe TicTacToe do
 				game = TicTacToe::Game.new
 				game.board = sample_board
 				player = TicTacToe::Player.new
-				AI = TicTacToe::AI.new(game, player)
-				output = AI.think()
+				robot = TicTacToe::AI.new(game, player)
+				output = robot.think()
 				subject { output }
 				specify { output should == 3 }
 			end
@@ -282,8 +282,8 @@ describe TicTacToe do
 				game = TicTacToe::Game.new
 				game.board = sample_board
 				player = TicTacToe::Player.new
-				AI = TicTacToe::AI.new(game, player)
-				output = AI.think()
+				robot = TicTacToe::AI.new(game, player)
+				output = robot.think()
 				subject { output }
 				specify { output should == 5 }
 			end
@@ -295,8 +295,8 @@ describe TicTacToe do
 				game = TicTacToe::Game.new
 				game.board = sample_board
 				player = TicTacToe::Player.new
-				AI = TicTacToe::AI.new(game, player)
-				output = AI.think()
+				robot = TicTacToe::AI.new(game, player)
+				output = robot.think()
 				subject { output }
 				specify { output should == 7 }
 			end
@@ -306,39 +306,39 @@ describe TicTacToe do
 			describe "left column" do
 				sample_board =
 					[[".", ".", "."],
-					["O", ".", "."],
-					["O", ".", "."]]
+					["X", ".", "."],
+					["X", ".", "."]]
 				game = TicTacToe::Game.new
 				game.board = sample_board
 				player = TicTacToe::Player.new
-				AI = TicTacToe::AI.new(game, player)
-				output = AI.think()
+				robot = TicTacToe::AI.new(game, player)
+				output = robot.think()
 				subject { output }
 				specify { output should == 1 }
 			end
 			describe "middle column" do
 				sample_board =
-					[[".", "O", "."],
+					[[".", "X", "."],
 					[".", ".", "."],
-					[".", "O", "."]]
+					[".", "X", "."]]
 				game = TicTacToe::Game.new
 				game.board = sample_board
 				player = TicTacToe::Player.new
-				AI = TicTacToe::AI.new(game, player)
-				output = AI.think()
+				robot = TicTacToe::AI.new(game, player)
+				output = robot.think()
 				subject { output }
 				specify { output should == 5 }
 			end
 			describe "right column" do
 				sample_board =
-					[[".", ".", "O"],
-					[".", ".", "O"],
+					[[".", ".", "X"],
+					[".", ".", "X"],
 					[".", ".", "."]]
 				game = TicTacToe::Game.new
 				game.board = sample_board
 				player = TicTacToe::Player.new
-				AI = TicTacToe::AI.new(game, player)
-				output = AI.think()
+				robot = TicTacToe::AI.new(game, player)
+				output = robot.think()
 				subject { output }
 				specify { output should == 9 }
 			end
@@ -348,13 +348,13 @@ describe TicTacToe do
 			describe "diagonal1" do
 				sample_board =
 					[[".", ".", "."],
-					[".", "O", "."],
-					[".", ".", "O"]]
+					[".", "X", "."],
+					[".", ".", "X"]]
 				game = TicTacToe::Game.new
 				game.board = sample_board
 				player = TicTacToe::Player.new
-				AI = TicTacToe::AI.new(game, player)
-				output = AI.think()
+				robot = TicTacToe::AI.new(game, player)
+				output = robot.think()
 				subject { output }
 				specify { output should == 1 }
 			end
@@ -366,8 +366,8 @@ describe TicTacToe do
 				game = TicTacToe::Game.new
 				game.board = sample_board
 				player = TicTacToe::Player.new
-				AI = TicTacToe::AI.new(game, player)
-				output = AI.think()
+				robot = TicTacToe::AI.new(game, player)
+				output = robot.think()
 				subject { output }
 				specify { output should == 5 }
 			end
@@ -379,8 +379,8 @@ describe TicTacToe do
 				game = TicTacToe::Game.new
 				game.board = sample_board
 				player = TicTacToe::Player.new
-				AI = TicTacToe::AI.new(game, player)
-				output = AI.think()
+				robot = TicTacToe::AI.new(game, player)
+				output = robot.think()
 				subject { output }
 				specify { output should == 7 }
 			end
