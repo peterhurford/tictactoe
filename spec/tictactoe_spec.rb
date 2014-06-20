@@ -208,8 +208,20 @@ describe TicTacToe do
 			output = game.draw?
 			subject { output }
 			specify { output should == true }
-		end		
+		end
 
+		describe "two dot tie E" do
+			sample_board =
+					[["X", "X", "O"],
+					[".", "X", "X"],
+					["O", ".", "O"]]
+			game = TicTacToe::Game.new
+			game.current_player = "X"
+			game.board = sample_board
+			output = game.draw?
+			subject { output }
+			specify { output should == true }
+		end
 	end
 	describe "Board should not draw" do
 		describe "when four dots" do
@@ -234,7 +246,7 @@ describe TicTacToe do
 			subject { output }
 			specify { output should == false }
 		end	
-		describe "when two dots and there's still game" do
+		describe "when two dots and there's still game A" do
 			sample_board =
 					[["O", "X", "X"],
 					["O", "O", "X"],
@@ -245,12 +257,37 @@ describe TicTacToe do
 			subject { output }
 			specify { output should == false }
 		end	
+		describe "when two dots and there's still game B" do
+			sample_board =
+					[["X", "X", "O"],
+					[".", "X", "X"],
+					["O", ".", "O"]]
+			game = TicTacToe::Game.new
+			game.current_player = "O"
+			game.board = sample_board
+			output = game.draw?
+			subject { output }
+			specify { output should == false }
+		end
+		describe "when two dots and there's still game C" do
+			sample_board =
+					[["O", "X", "O"],
+					[".", "X", "."],
+					["X", "O", "O"]]
+			game = TicTacToe::Game.new
+			game.current_player = "X"
+			game.board = sample_board
+			output = game.draw?
+			subject { output }
+			specify { output should == false }
+		end
 		describe "when one dot and there's still game" do
 			sample_board =
 					[["X", "O", "O"],
 					["O", "O", "X"],
 					["X", ".", "X"]]
 			game = TicTacToe::Game.new
+			game.current_player = "X"
 			game.board = sample_board
 			output = game.draw?
 			subject { output }
@@ -259,130 +296,260 @@ describe TicTacToe do
 	end
 
 
-	describe "AI should win" do		
-		describe "in rows" do
-			describe "top row" do
-				sample_board =
-					[["X", "X", "."],
-					[".", ".", "."],
-					[".", ".", "."]]
-				game = TicTacToe::Game.new
-				game.board = sample_board
-				player = TicTacToe::Player.new
-				robot = TicTacToe::AI.new(game, player)
-				output = robot.think()
-				subject { output }
-				specify { output should == 3 }
+	describe "AI" do
+		describe "AI should win" do		
+			describe "in rows" do
+				describe "top row" do
+					sample_board =
+						[["X", "X", "."],
+						[".", ".", "."],
+						[".", ".", "."]]
+					game = TicTacToe::Game.new
+					game.board = sample_board
+					player = TicTacToe::Player.new
+					robot = TicTacToe::AI.new(game, player)
+					output = robot.think()
+					subject { output }
+					specify { output should == 3 }
+				end
+				describe "middle row" do
+					sample_board =
+						[[".", ".", "."],
+						["X", ".", "X"],
+						[".", ".", "."]]
+					game = TicTacToe::Game.new
+					game.board = sample_board
+					player = TicTacToe::Player.new
+					robot = TicTacToe::AI.new(game, player)
+					output = robot.think()
+					subject { output }
+					specify { output should == 5 }
+				end
+				describe "bottom row" do
+					sample_board =
+						[[".", ".", "."],
+						[".", ".", "."],
+						[".", "X", "X"]]
+					game = TicTacToe::Game.new
+					game.board = sample_board
+					player = TicTacToe::Player.new
+					robot = TicTacToe::AI.new(game, player)
+					output = robot.think()
+					subject { output }
+					specify { output should == 7 }
+				end
 			end
-			describe "middle row" do
-				sample_board =
-					[[".", ".", "."],
-					["X", ".", "X"],
-					[".", ".", "."]]
-				game = TicTacToe::Game.new
-				game.board = sample_board
-				player = TicTacToe::Player.new
-				robot = TicTacToe::AI.new(game, player)
-				output = robot.think()
-				subject { output }
-				specify { output should == 5 }
+
+			describe "in columns" do
+				describe "left column" do
+					sample_board =
+						[[".", ".", "."],
+						["X", ".", "."],
+						["X", ".", "."]]
+					game = TicTacToe::Game.new
+					game.board = sample_board
+					player = TicTacToe::Player.new
+					robot = TicTacToe::AI.new(game, player)
+					output = robot.think()
+					subject { output }
+					specify { output should == 1 }
+				end
+				describe "middle column" do
+					sample_board =
+						[[".", "X", "."],
+						[".", ".", "."],
+						[".", "X", "."]]
+					game = TicTacToe::Game.new
+					game.board = sample_board
+					player = TicTacToe::Player.new
+					robot = TicTacToe::AI.new(game, player)
+					output = robot.think()
+					subject { output }
+					specify { output should == 5 }
+				end
+				describe "right column" do
+					sample_board =
+						[[".", ".", "X"],
+						[".", ".", "X"],
+						[".", ".", "."]]
+					game = TicTacToe::Game.new
+					game.board = sample_board
+					player = TicTacToe::Player.new
+					robot = TicTacToe::AI.new(game, player)
+					output = robot.think()
+					subject { output }
+					specify { output should == 9 }
+				end
 			end
-			describe "bottom row" do
-				sample_board =
-					[[".", ".", "."],
-					[".", ".", "."],
-					[".", "X", "X"]]
-				game = TicTacToe::Game.new
-				game.board = sample_board
-				player = TicTacToe::Player.new
-				robot = TicTacToe::AI.new(game, player)
-				output = robot.think()
-				subject { output }
-				specify { output should == 7 }
+
+			describe "in diagonals" do
+				describe "diagonal1" do
+					sample_board =
+						[[".", ".", "."],
+						[".", "X", "."],
+						[".", ".", "X"]]
+					game = TicTacToe::Game.new
+					game.board = sample_board
+					player = TicTacToe::Player.new
+					robot = TicTacToe::AI.new(game, player)
+					output = robot.think()
+					subject { output }
+					specify { output should == 1 }
+				end
+				describe "diagonal2" do
+					sample_board =
+						[[".", ".", "X"],
+						[".", ".", "."],
+						["X", ".", "."]]
+					game = TicTacToe::Game.new
+					game.board = sample_board
+					player = TicTacToe::Player.new
+					robot = TicTacToe::AI.new(game, player)
+					output = robot.think()
+					subject { output }
+					specify { output should == 5 }
+				end
+				describe "diagonal2 B" do
+					sample_board =
+						[[".", ".", "X"],
+						[".", "X", "."],
+						[".", ".", "."]]
+					game = TicTacToe::Game.new
+					game.board = sample_board
+					player = TicTacToe::Player.new
+					robot = TicTacToe::AI.new(game, player)
+					output = robot.think()
+					subject { output }
+					specify { output should == 7 }
+				end
 			end
 		end
 
-		describe "in columns" do
-			describe "left column" do
-				sample_board =
-					[[".", ".", "."],
-					["X", ".", "."],
-					["X", ".", "."]]
-				game = TicTacToe::Game.new
-				game.board = sample_board
-				player = TicTacToe::Player.new
-				robot = TicTacToe::AI.new(game, player)
-				output = robot.think()
-				subject { output }
-				specify { output should == 1 }
+		describe "AI should block wins" do		
+			describe "in rows" do
+				describe "top row" do
+					sample_board =
+						[["O", "O", "."],
+						[".", "X", "O"],
+						[".", "X", "."]]
+					game = TicTacToe::Game.new
+					game.board = sample_board
+					player = TicTacToe::Player.new
+					robot = TicTacToe::AI.new(game, player)
+					output = robot.think()
+					subject { output }
+					specify { output should == 3 }
+				end
+				describe "middle row" do
+					sample_board =
+						[[".", "X", "."],
+						["O", ".", "O"],
+						[".", ".", "X"]]
+					game = TicTacToe::Game.new
+					game.board = sample_board
+					player = TicTacToe::Player.new
+					robot = TicTacToe::AI.new(game, player)
+					output = robot.think()
+					subject { output }
+					specify { output should == 5 }
+				end
+				describe "bottom row" do
+					sample_board =
+						[["O", "X", "."],
+						[".", "X", "."],
+						[".", "O", "O"]]
+					game = TicTacToe::Game.new
+					game.board = sample_board
+					player = TicTacToe::Player.new
+					robot = TicTacToe::AI.new(game, player)
+					output = robot.think()
+					subject { output }
+					specify { output should == 7 }
+				end
 			end
-			describe "middle column" do
-				sample_board =
-					[[".", "X", "."],
-					[".", ".", "."],
-					[".", "X", "."]]
-				game = TicTacToe::Game.new
-				game.board = sample_board
-				player = TicTacToe::Player.new
-				robot = TicTacToe::AI.new(game, player)
-				output = robot.think()
-				subject { output }
-				specify { output should == 5 }
-			end
-			describe "right column" do
-				sample_board =
-					[[".", ".", "X"],
-					[".", ".", "X"],
-					[".", ".", "."]]
-				game = TicTacToe::Game.new
-				game.board = sample_board
-				player = TicTacToe::Player.new
-				robot = TicTacToe::AI.new(game, player)
-				output = robot.think()
-				subject { output }
-				specify { output should == 9 }
-			end
-		end
 
-		describe "in diagonals" do
-			describe "diagonal1" do
-				sample_board =
-					[[".", ".", "."],
-					[".", "X", "."],
-					[".", ".", "X"]]
-				game = TicTacToe::Game.new
-				game.board = sample_board
-				player = TicTacToe::Player.new
-				robot = TicTacToe::AI.new(game, player)
-				output = robot.think()
-				subject { output }
-				specify { output should == 1 }
+			describe "in columns" do
+				describe "left column" do
+					sample_board =
+						[[".", ".", "."],
+						["O", ".", "X"],
+						["O", "X", "."]]
+					game = TicTacToe::Game.new
+					game.board = sample_board
+					player = TicTacToe::Player.new
+					robot = TicTacToe::AI.new(game, player)
+					output = robot.think()
+					subject { output }
+					specify { output should == 1 }
+				end
+				describe "middle column" do
+					sample_board =
+						[[".", "O", "."],
+						["X", ".", "."],
+						[".", "O", "X"]]
+					game = TicTacToe::Game.new
+					game.board = sample_board
+					player = TicTacToe::Player.new
+					robot = TicTacToe::AI.new(game, player)
+					output = robot.think()
+					subject { output }
+					specify { output should == 5 }
+				end
+				describe "right column" do
+					sample_board =
+						[[".", ".", "O"],
+						["X", "X", "O"],
+						[".", ".", "."]]
+					game = TicTacToe::Game.new
+					game.board = sample_board
+					player = TicTacToe::Player.new
+					robot = TicTacToe::AI.new(game, player)
+					output = robot.think()
+					subject { output }
+					specify { output should == 9 }
+				end
 			end
-			describe "diagonal2" do
-				sample_board =
-					[[".", ".", "X"],
-					[".", ".", "."],
-					["X", ".", "."]]
-				game = TicTacToe::Game.new
-				game.board = sample_board
-				player = TicTacToe::Player.new
-				robot = TicTacToe::AI.new(game, player)
-				output = robot.think()
-				subject { output }
-				specify { output should == 5 }
-			end
-			describe "diagonal2 B" do
-				sample_board =
-					[[".", ".", "X"],
-					[".", "X", "."],
-					[".", ".", "."]]
-				game = TicTacToe::Game.new
-				game.board = sample_board
-				player = TicTacToe::Player.new
-				robot = TicTacToe::AI.new(game, player)
-				output = robot.think()
-				subject { output }
-				specify { output should == 7 }
+
+			describe "in diagonals" do
+				describe "diagonal1" do
+					sample_board =
+						[[".", ".", "."],
+						[".", "O", "."],
+						["X", "X", "O"]]
+					game = TicTacToe::Game.new
+					game.board = sample_board
+					player = TicTacToe::Player.new
+					robot = TicTacToe::AI.new(game, player)
+					output = robot.think()
+					subject { output }
+					specify { output should == 1 }
+				end
+				describe "diagonal2" do
+					sample_board =
+						[[".", ".", "O"],
+						[".", ".", "."],
+						["O", "X", "X"]]
+					game = TicTacToe::Game.new
+					game.board = sample_board
+					player = TicTacToe::Player.new
+					robot = TicTacToe::AI.new(game, player)
+					output = robot.think()
+					subject { output }
+					specify { output should == 5 }
+				end
+				describe "diagonal2 B" do
+					sample_board =
+						[[".", "X", "O"],
+						[".", "O", "."],
+						[".", "X", "."]]
+					game = TicTacToe::Game.new
+					game.board = sample_board
+					player = TicTacToe::Player.new
+					robot = TicTacToe::AI.new(game, player)
+					output = robot.think()
+					subject { output }
+					specify { output should == 7 }
+				end
 			end
 		end
 	end

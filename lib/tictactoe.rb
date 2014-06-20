@@ -174,7 +174,6 @@ module TicTacToe
 				@game.make_move!(@game.current_player, plSquare)			# Make the move on the board.
 				if @game.win?																					# Check board state for winner...
 					@game.print_board()
-					#{helper_display_cp_name()}
 					puts "Congratulations... " + helper_display_name(@game.win?) + " wins!"
 					@game_over = true
 				elsif @game.draw? 															# Check board state for a draw...
@@ -290,11 +289,14 @@ module TicTacToe
 			dimensions = ["row", "col", "diag1", "diag2"]
 			count = @game.helper_determine_game_state("AI")
 
+
+
+
 			# Step 1: Win. (If the AI has two in a row, the AI will place a third to get three in a row.)
 			select = false
 			dimensions.each do |dim|												# Determine if AI has two in a row
 				for i in (0..2) do
-					select = [dim, i] if count[dim][i]["X"] == 2
+					select = [dim, i] if count[dim][i]["X"] == 2 and count[dim][i]["."] == 1
 				end
 			end
 			if select 																			# If so, determine and place the third...
@@ -316,11 +318,78 @@ module TicTacToe
 					end
 				end
 			end
-			false
+
+
 
 			# Step 2: Block. If the opponent has two in a row, the AI must play the third themself to block the opponent.
+			select = false
+			dimensions.each do |dim|												# Determine if human has two in a row
+				for i in (0..2) do
+					select = [dim, i] if count[dim][i]["O"] == 2 and count[dim][i]["."] == 1
+				end
+			end
+			if select 																			# If so, determine and place the third...
+				if select[0] == "row"
+					for i in (0..2) do
+						return select[1]*3 + i+1 if board[select[1]][i] == "."
+					end
+				elsif select[0] == "col"
+					for i in (0..2) do
+						return i*3 + select[1]+1 if board[i][select[1]] == "."
+					end
+				elsif select[0] == "diag1"
+					for i in (0..2) do
+						return i*3 + i+1 if board[i][i] == "."
+					end
+				elsif select[0] == "diag2"
+					for i in (0..2) do
+						return i*3 + 2-i+1 if board[i][2-i] == "."
+					end
+				end
+			end
+
+
 
 			# Step 3: Fork. Create an opportunity where the AI has two threats to win (two non-blocked lines of 2).
+			tlc = board[0][0]	#1
+			tm = board[0][1]  #2
+			trc = board[0][2] #3
+			lm = board[1][2]  #4
+			mm = board[1][1]  #5
+			rm = board[1][0]  #6
+			blc = board[2][0] #7
+			bm = board[2][1]  #8
+			brc = board[2][2] #9
+
+			# Step 3.1: Tall L Fork. If two corners are owned and gaps, go in the third corner if gaps are not filled.
+			return 7 if tlc == "X" and trc == "X" and @game.legal_move? 7 and tm == "." and lm == "."
+			return 9 if tlc == "X" and trc == "X" and @game.legal_move? 9 and tm == "." and rm == "."
+			return 3 if tlc == "X" and blc == "X" and @game.legal_move? 3 and tm == "." and lm == "."
+			return 9 if tlc == "X" and blc == "X" and @game.legal_move? 9 and lm == "." and bm == "."
+			return 3 if tlc == "X" and brc == "X" and @game.legal_move? 3 and tm == "." and rm == "."
+			return 7 if tlc == "X" and brc == "X" and @game.legal_move? 7 and lm == "." and bm == "."
+			return 1 if trc == "X" and blc == "X" and @game.legal_move? 1 and tm == "." and lm == "."
+			return 9 if trc == "X" and blc == "X" and @game.legal_move? 9 and rm == "." and bm == "."
+			return 1 if trc == "X" and brc == "X" and @game.legal_move? 1 and tm == "." and rm == "."
+			return 7 if trc == "X" and brc == "X" and @game.legal_move? 7 and rm == "." and bm == "."
+			return 1 if blc == "X" and brc == "X" and @game.legal_move? 1 and bm == "." and lm == "."
+			return 3 if blc == "X" and brc == "X" and @game.legal_move? 3 and bm == "." and rm == "."
+
+			# Step 3.2: Pyramid Fork A. If any two same-side corners owned, go in the middle-middle if gaps are not filled.
+			return 5 if tlc == "X" and trc == "X" and @game.legal_move? 5 and blc == "." and brc == "."
+			return 5 if blc == "X" and brc == "X" and @game.legal_move? 5 and tlc == "." and trc == "."
+			return 5 if tlc == "X" and blc == "X" and @game.legal_move? 5 and trc == "." and brc == "."
+			return 5 if trc == "X" and brc == "X" and @game.legal_move? 5 and tlc == "." and blc == "."
+
+			# Step 3.3: Pyramid Fork B. If a corner and middle-middle owned, go in the other same-side corner if gaps are not filled.
+			return 1 if trc == "X" and mm == "X" and @game.legal_move? 1 and blc == "." and brc == "."
+			return 3 if tlc == "X" and mm == "X" and @game.legal_move? 3 and blc == "." and brc == "."
+			return 7 if brc == "X" and mm == "X" and @game.legal_move? 7 and tlc == "." and trc == "."
+			return 9 if blc == "X" and mm == "X" and @game.legal_move? 9 and tlc == "." and trc == "."
+			return 1 if blc == "X" and mm == "X" and @game.legal_move? 1 and trc == "." and brc == "."
+			return 7 if tlc == "X" and mm == "X" and @game.legal_move? 7 and trc == "." and brc == "."
+			return 3 if brc == "X" and mm == "X" and @game.legal_move? 3 and tlc == "." and blc == "."
+			return 9 if trc == "X" and mm == "X" and @game.legal_move? 9 and tlc == "." and blc == "."
 
 			# Step 4: Block an opponent's fork.  The AI should create two in a row to force the opponent into defending, as long as it doesn't result in them creating a fork.
 			# (For example, if "X" has a corner, "O" has the center, and "X" has the opposite corner as well, "O" must not play a corner in order to win, as playing a corner in this scenario creates a fork for "X" to win.)
@@ -334,6 +403,8 @@ module TicTacToe
 			# Step 8: Empty Side. The AI plays in the middle of any of the four sides.
 
 			# Step 9: Open. If playing first, pick a random corner.
+
+			false
 		end
 	end
 
@@ -341,3 +412,5 @@ end
 
 ##### TO-DO
 ## * AI is smart + commit
+## * Split AI + commit
+## * Refactor AI + commit
