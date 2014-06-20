@@ -209,19 +209,6 @@ describe TicTacToe do
       subject { output }
       specify { output should == true }
     end
-
-    describe "two dot tie E" do
-      sample_board =
-          [["X", "X", "O"],
-          [".", "X", "X"],
-          ["O", ".", "O"]]
-      game = TicTacToe::Game.new
-      game.current_player = "X"
-      game.board = sample_board
-      output = game.draw?
-      subject { output }
-      specify { output should == true }
-    end
   end
   describe "Board should not draw" do
     describe "when four dots" do

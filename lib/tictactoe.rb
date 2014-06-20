@@ -100,14 +100,11 @@ module TicTacToe
         return true if total_dots == 0                  # A draw must occur if there are no longer any empty spaces.
 
         # A draw cannot occur if there are two of the same type in a row and the opportunity to finish the row (i.e., one turn away from winning.)
-        # Though, there still could be a draw if there is only one empty space and the player is forced to block (not ruled out here and captured later.)
+        # Though, there still could be a draw if there is only one empty space and the player is forced to block (checked in next block).
         dimensions.each do |dim|
           for i in (0..2) do
-            checkSquare = board[i][1] if dim == "row"
-            checkSquare = board[1][i] if dim == "col"
-            checkSquare = board[1][1] if dim == "diag1" or dim == "diag2"
-            return false if count[dim][i]["X"] == 2 and checkSquare == "X" and count[dim][i]["."] == 1 and @current_player == "O"
-            return false if count[dim][i]["O"] == 2 and checkSquare == "O" and count[dim][i]["."] == 1 and @current_player == "X"
+            return false if count[dim][i]["X"] == 2 and count[dim][i]["."] == 1 and @current_player == "O"
+            return false if count[dim][i]["O"] == 2 and count[dim][i]["."] == 1 and @current_player == "X"
           end
         end
 
@@ -117,7 +114,8 @@ module TicTacToe
             return true if count[dim][i]["."] == 1 and count[dim][i]["O"] == 1 and count[dim][i]["X"] == 1 and total_dots == 1
           end
         end
-        return true if total_dots == 2
+
+        return true if total_dots == 2                # Any two dot map that gets this far must be a draw
 
       elsif mode == "AI"                              # AI can request the count hash (so it doesn't need to be coded elsewhere)
         return count
