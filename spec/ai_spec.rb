@@ -1,3 +1,5 @@
+require "minitest/spec"
+require "minitest/autorun"
 require_relative '../lib/tictactoe'
 require_relative '../lib/ai'
 
@@ -16,7 +18,7 @@ describe TicTacToe do
           robot = TicTacToe::AI.new(game, player)
           output = robot.think()
           subject { output }
-          specify { output should == 3 }
+          specify { output must_equal 3 }
         end
         describe "middle row" do
           sample_board =
@@ -29,7 +31,7 @@ describe TicTacToe do
           robot = TicTacToe::AI.new(game, player)
           output = robot.think()
           subject { output }
-          specify { output should == 5 }
+          specify { output must_equal 5 }
         end
         describe "bottom row" do
           sample_board =
@@ -42,7 +44,7 @@ describe TicTacToe do
           robot = TicTacToe::AI.new(game, player)
           output = robot.think()
           subject { output }
-          specify { output should == 7 }
+          specify { output must_equal 7 }
         end
       end
 
@@ -58,7 +60,7 @@ describe TicTacToe do
           robot = TicTacToe::AI.new(game, player)
           output = robot.think()
           subject { output }
-          specify { output should == 1 }
+          specify { output must_equal 1 }
         end
         describe "middle column" do
           sample_board =
@@ -71,7 +73,7 @@ describe TicTacToe do
           robot = TicTacToe::AI.new(game, player)
           output = robot.think()
           subject { output }
-          specify { output should == 5 }
+          specify { output must_equal 5 }
         end
         describe "right column" do
           sample_board =
@@ -84,7 +86,7 @@ describe TicTacToe do
           robot = TicTacToe::AI.new(game, player)
           output = robot.think()
           subject { output }
-          specify { output should == 9 }
+          specify { output must_equal 9 }
         end
       end
 
@@ -100,7 +102,7 @@ describe TicTacToe do
           robot = TicTacToe::AI.new(game, player)
           output = robot.think()
           subject { output }
-          specify { output should == 1 }
+          specify { output must_equal 1 }
         end
         describe "diagonal2" do
           sample_board =
@@ -113,7 +115,7 @@ describe TicTacToe do
           robot = TicTacToe::AI.new(game, player)
           output = robot.think()
           subject { output }
-          specify { output should == 5 }
+          specify { output must_equal 5 }
         end
         describe "diagonal2 B" do
           sample_board =
@@ -126,7 +128,7 @@ describe TicTacToe do
           robot = TicTacToe::AI.new(game, player)
           output = robot.think()
           subject { output }
-          specify { output should == 7 }
+          specify { output must_equal 7 }
         end
       end
     end
@@ -144,7 +146,7 @@ describe TicTacToe do
           robot = TicTacToe::AI.new(game, player)
           output = robot.think()
           subject { output }
-          specify { output should == 3 }
+          specify { output must_equal 3 }
         end
         describe "middle row" do
           sample_board =
@@ -157,7 +159,7 @@ describe TicTacToe do
           robot = TicTacToe::AI.new(game, player)
           output = robot.think()
           subject { output }
-          specify { output should == 5 }
+          specify { output must_equal 5 }
         end
         describe "bottom row" do
           sample_board =
@@ -170,7 +172,7 @@ describe TicTacToe do
           robot = TicTacToe::AI.new(game, player)
           output = robot.think()
           subject { output }
-          specify { output should == 7 }
+          specify { output must_equal 7 }
         end
       end
 
@@ -186,7 +188,7 @@ describe TicTacToe do
           robot = TicTacToe::AI.new(game, player)
           output = robot.think()
           subject { output }
-          specify { output should == 1 }
+          specify { output must_equal 1 }
         end
         describe "middle column" do
           sample_board =
@@ -199,7 +201,7 @@ describe TicTacToe do
           robot = TicTacToe::AI.new(game, player)
           output = robot.think()
           subject { output }
-          specify { output should == 5 }
+          specify { output must_equal 5 }
         end
         describe "right column" do
           sample_board =
@@ -212,7 +214,7 @@ describe TicTacToe do
           robot = TicTacToe::AI.new(game, player)
           output = robot.think()
           subject { output }
-          specify { output should == 9 }
+          specify { output must_equal 9 }
         end
       end
 
@@ -228,7 +230,7 @@ describe TicTacToe do
           robot = TicTacToe::AI.new(game, player)
           output = robot.think()
           subject { output }
-          specify { output should == 1 }
+          specify { output must_equal 1 }
         end
         describe "diagonal2" do
           sample_board =
@@ -241,7 +243,7 @@ describe TicTacToe do
           robot = TicTacToe::AI.new(game, player)
           output = robot.think()
           subject { output }
-          specify { output should == 5 }
+          specify { output must_equal 5 }
         end
         describe "diagonal2 B" do
           sample_board =
@@ -254,7 +256,7 @@ describe TicTacToe do
           robot = TicTacToe::AI.new(game, player)
           output = robot.think()
           subject { output }
-          specify { output should == 7 }
+          specify { output must_equal 7 }
         end
       end
     end

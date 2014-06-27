@@ -1,18 +1,17 @@
+require 'minitest/autorun'
 require_relative '../lib/tictactoe'
 
 describe TicTacToe do
-  describe "Board should win" do    
+  subject { TicTacToe::Game.new }
+  describe "Board should win" do   
     describe "in rows" do
       describe "top row" do
         sample_board =
           [["X", "X", "X"],
           [".", ".", "."],
           [".", ".", "."]]
-        game = TicTacToe::Game.new
         game.board = sample_board
-        output = game.win?
-        subject { output }
-        specify { output should == "X" }
+        specify { @game.win? must_equal "X" }
       end
       describe "middle row" do
         sample_board =
@@ -23,7 +22,7 @@ describe TicTacToe do
         game.board = sample_board
         output = game.win?
         subject { output }
-        specify { output should == "X" }
+        specify { output must_equal "X" }
       end
       describe "bottom row" do
         sample_board =
@@ -34,7 +33,7 @@ describe TicTacToe do
         game.board = sample_board
         output = game.win?
         subject { output }
-        specify { output should == "X" }
+        specify { output must_equal "X" }
       end
     end
 
@@ -48,7 +47,7 @@ describe TicTacToe do
         game.board = sample_board
         output = game.win?
         subject { output }
-        specify { output should == "O" }
+        specify { output must_equal "O" }
       end
       describe "middle column" do
         sample_board =
@@ -59,7 +58,7 @@ describe TicTacToe do
         game.board = sample_board
         output = game.win?
         subject { output }
-        specify { output should == "O" }
+        specify { output must_equal "O" }
       end
       describe "right column" do
         sample_board =
@@ -70,7 +69,7 @@ describe TicTacToe do
         game.board = sample_board
         output = game.win?
         subject { output }
-        specify { output should == "O" }
+        specify { output must_equal "O" }
       end
     end
 
@@ -84,7 +83,7 @@ describe TicTacToe do
         game.board = sample_board
         output = game.win?
         subject { output }
-        specify { output should == "O" }
+        specify { output must_equal "O" }
       end
       describe "diagonal2" do
         sample_board =
@@ -95,7 +94,7 @@ describe TicTacToe do
         game.board = sample_board
         output = game.win?
         subject { output }
-        specify { output should == "X" }
+        specify { output must_equal "X" }
       end
     end
   end
@@ -109,7 +108,7 @@ describe TicTacToe do
         game.board = sample_board
         output = game.win?
         subject { output }
-        specify { output should == false }
+        specify { output must_equal false }
       end
   end
 
@@ -124,7 +123,7 @@ describe TicTacToe do
       game.board = sample_board
       output = game.draw?
       subject { output }
-      specify { output should == true }
+      specify { output must_equal true }
     end
     describe "one dot tie A" do
       sample_board =
@@ -135,7 +134,7 @@ describe TicTacToe do
       game.board = sample_board
       output = game.draw?
       subject { output }
-      specify { output should == true }
+      specify { output must_equal true }
     end
 
     describe "one dot tie B" do
@@ -147,7 +146,7 @@ describe TicTacToe do
       game.board = sample_board
       output = game.draw?
       subject { output }
-      specify { output should == true }
+      specify { output must_equal true }
     end
 
     describe "one dot tie C" do
@@ -159,7 +158,7 @@ describe TicTacToe do
       game.board = sample_board
       output = game.draw?
       subject { output }
-      specify { output should == true }
+      specify { output must_equal true }
     end   
 
     describe "two dot tie A" do
@@ -171,7 +170,7 @@ describe TicTacToe do
       game.board = sample_board
       output = game.draw?
       subject { output }
-      specify { output should == true }
+      specify { output must_equal true }
     end
 
     describe "two dot tie B" do
@@ -183,7 +182,7 @@ describe TicTacToe do
       game.board = sample_board
       output = game.draw?
       subject { output }
-      specify { output should == true }
+      specify { output must_equal true }
     end
 
     describe "two dot tie C" do
@@ -195,7 +194,7 @@ describe TicTacToe do
       game.board = sample_board
       output = game.draw?
       subject { output }
-      specify { output should == true }
+      specify { output must_equal true }
     end
 
     describe "two dot tie D" do
@@ -207,7 +206,7 @@ describe TicTacToe do
       game.board = sample_board
       output = game.draw?
       subject { output }
-      specify { output should == true }
+      specify { output must_equal true }
     end
   end
   describe "Board should not draw" do
@@ -220,7 +219,7 @@ describe TicTacToe do
       game.board = sample_board
       output = game.draw?
       subject { output }
-      specify { output should == false }
+      specify { output must_equal false }
     end
     describe "when three dots" do
       sample_board =
@@ -231,7 +230,7 @@ describe TicTacToe do
       game.board = sample_board
       output = game.draw?
       subject { output }
-      specify { output should == false }
+      specify { output must_equal false }
     end 
     describe "when two dots and there's still game A" do
       sample_board =
@@ -242,7 +241,7 @@ describe TicTacToe do
       game.board = sample_board
       output = game.draw?
       subject { output }
-      specify { output should == false }
+      specify { output must_equal false }
     end 
     describe "when two dots and there's still game B" do
       sample_board =
@@ -254,7 +253,7 @@ describe TicTacToe do
       game.board = sample_board
       output = game.draw?
       subject { output }
-      specify { output should == false }
+      specify { output must_equal false }
     end
     describe "when two dots and there's still game C" do
       sample_board =
@@ -266,7 +265,7 @@ describe TicTacToe do
       game.board = sample_board
       output = game.draw?
       subject { output }
-      specify { output should == false }
+      specify { output must_equal false }
     end
     describe "when one dot and there's still game" do
       sample_board =
@@ -278,7 +277,7 @@ describe TicTacToe do
       game.board = sample_board
       output = game.draw?
       subject { output }
-      specify { output should == false }
+      specify { output must_equal false }
     end 
   end
 
